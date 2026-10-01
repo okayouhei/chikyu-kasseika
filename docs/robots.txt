@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://okayouhei.github.io/chikyu-kasseika/sitemap.xml
