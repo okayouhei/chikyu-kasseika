@@ -38,6 +38,7 @@ nav a:hover{color:var(--sky)}
 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:999px;font-weight:700;text-decoration:none;font-size:1rem}
 .btn-main{background:var(--sky);color:var(--surface)}
+.btn-ig{background:linear-gradient(45deg,#f58529,#dd2a7b 55%,#8134af);color:#fff}
 .btn-sub{border:2px solid var(--sky);color:var(--sky);background:transparent}
 
 section{padding-block:48px;border-top:1px solid var(--line)}
@@ -74,6 +75,7 @@ section h2{font-size:clamp(1.5rem,4.5vw,1.9rem);margin-top:6px;margin-bottom:20p
 .link-row b{font-family:var(--display)}
 .link-row span{color:var(--muted);font-size:.95rem;word-break:break-all;min-width:0}
 
+footer p{margin:4px 0}
 footer{padding-block:32px;text-align:center;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
 @media (prefers-reduced-motion:no-preference){.btn{transition:transform .15s}.btn:hover{transform:translateY(-2px)}}
 

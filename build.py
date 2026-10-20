@@ -49,7 +49,9 @@ def header(prefix):
             f'<a href="{prefix}blog/index.html">ブログ</a><a href="{prefix}index.html#join">仲間募集</a><a href="{prefix}index.html#contact">連絡先</a></nav></div></header>')
 
 
-FOOTER = f'<footer>© 2026 {SITE} ・ 広島</footer>'
+FOOTER = (f'<footer><p>障がいがあってもなくても、自然につながれる場所を広島に。</p>'
+          f'<p><a href="https://www.instagram.com/ayu19841002/" target="_blank" rel="noopener">Instagram @ayu19841002</a></p>'
+          f'<p>© 2026 {SITE} ・ 広島</p></footer>')
 
 
 def full_doc(title, desc, css, body, extra_head=""):
