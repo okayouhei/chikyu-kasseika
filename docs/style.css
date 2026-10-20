@@ -94,3 +94,18 @@ footer{padding-block:32px;text-align:center;color:var(--muted);font-size:.85rem;
 .article .body h2{font-size:1.3rem;margin-top:.8em}
 .article .body ul{margin:0;padding-left:1.4em}
 .back{display:inline-block;margin-top:40px;font-weight:700}
+
+/* ありが党 */
+.ari section{padding-block:40px}
+.ari h2{font-size:1.5rem;margin-bottom:12px}
+.ari-hero{background:linear-gradient(135deg,#ff8a3d,#e8506a);color:#fff;padding-block:64px 56px;text-align:center}
+.ari-hero h1{font-size:clamp(2.6rem,11vw,4rem);font-weight:900;letter-spacing:.08em;margin-top:14px}
+.ari-copy{font-size:1.3rem;font-weight:700;margin-top:6px}
+.ari-badge{display:inline-block;background:#fff;color:#d9435a;font-weight:700;font-size:.9rem;padding:4px 16px;border-radius:999px}
+.ari-sky{background:linear-gradient(135deg,#d8f1fa,#fde3ee);color:#1f2a44}
+.ari-warm{background:#fff4e8;color:#14212e}
+.ari-list{padding-left:1.4em;margin:0 0 10px}
+.ari-teaser{background:#fff4e8;border:2px solid #ff8a3d;border-radius:18px;padding:22px}
+.ari-teaser h3{font-size:1.3rem}
+.ari-teaser p{margin-top:6px}
+.btn-ari{background:#e8506a;color:#fff;margin-top:14px}

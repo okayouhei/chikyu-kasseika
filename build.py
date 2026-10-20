@@ -46,7 +46,7 @@ def cards(posts, prefix):
 def header(prefix):
     return (f'<header><div class="wrap"><a class="logo" href="{prefix}index.html">{SITE}</a>'
             f'<nav aria-label="メニュー"><a href="{prefix}index.html#about">岡ちゃん</a><a href="{prefix}index.html#event">イベント</a>'
-            f'<a href="{prefix}blog/index.html">ブログ</a><a href="{prefix}index.html#join">仲間募集</a><a href="{prefix}index.html#contact">連絡先</a></nav></div></header>')
+            f'<a href="{prefix}blog/index.html">ブログ</a><a href="{prefix}index.html#join">仲間募集</a><a href="{prefix}arigatou.html">ありが党</a><a href="{prefix}index.html#contact">連絡先</a></nav></div></header>')
 
 
 FOOTER = (f'<footer><p>障がいがあってもなくても、自然につながれる場所を広島に。</p>'
@@ -106,13 +106,17 @@ def build():
                                                      f'<script type="application/ld+json">{org}</script>\n'), encoding="utf-8")
         else:  # プレビュー用: doctype なし（公開時に包まれる）
             (out / "page.html").write_text(f"<title>{SITE}</title>\n{FONTS}\n<link rel=\"stylesheet\" href=\"style.css\">\n{home_body}\n", encoding="utf-8")
+        ari_body = header("") + "\n" + (ROOT / "arigatou.html").read_text(encoding="utf-8") + "\n" + FOOTER
+        (out / "arigatou.html").write_text(full_doc(f"ありが党｜政治を、もっと身近に（広島・呼びかけ人 岡ちゃん）",
+            "広島から始める政治の仲間づくり「ありが党」。政治団体として動き出すための準備中です。呼びかけ人は電動車椅子で暮らす岡ちゃん。仲間を募集しています。",
+            "style.css", ari_body), encoding="utf-8")
         (out / "blog" / "index.html").write_text(full_doc(f"活動ブログ｜{SITE}", f"{SITE}（広島）の活動ブログ。", "../style.css", list_body(posts, "../")), encoding="utf-8")
         for p in posts:
             (out / "blog" / f'{p["slug"]}.html').write_text(
                 full_doc(f'{p["title"]}｜{SITE}', p.get("summary", DESC), "../style.css", post_body(p, "../")), encoding="utf-8")
     # 検索エンジン向け
     docs = ROOT / "docs"
-    urls = [BASE, BASE + "blog/index.html"] + [BASE + f'blog/{p["slug"]}.html' for p in posts]
+    urls = [BASE, BASE + "arigatou.html", BASE + "blog/index.html"] + [BASE + f'blog/{p["slug"]}.html' for p in posts]
     (docs / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"<url><loc>{u}</loc></url>\n" for u in urls) + "</urlset>\n", encoding="utf-8")
     (docs / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n", encoding="utf-8")
