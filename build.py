@@ -66,6 +66,7 @@ def full_doc(title, desc, css, body, extra_head=""):
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:locale" content="ja_JP">
+<meta name="google-site-verification" content="hpizfolThPj-HkkcKGadPxsuaJqWVsVbDw-ky93iKaU" />
 {extra_head}{FONTS}
 <link rel="stylesheet" href="{css}">
 </head>
