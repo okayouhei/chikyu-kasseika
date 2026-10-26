@@ -101,6 +101,8 @@ def build():
         (out / "blog").mkdir(parents=True)
         shutil.copy(ROOT / "style.css", out / "style.css")
         shutil.copytree(ROOT / "img", out / "img")
+        if kind == "dist":  # QR名刺メーカー（そのままコピー）
+            shutil.copytree(ROOT / "meishi", out / "meishi")
         home_body = header("") + "\n" + home + "\n" + FOOTER
         if kind == "dist":
             (out / "index.html").write_text(full_doc(f"{SITE}｜広島から、障がいがあってもなくてもつながれる場所を", DESC, "style.css", home_body,
@@ -117,7 +119,7 @@ def build():
                 full_doc(f'{p["title"]}｜{SITE}', p.get("summary", DESC), "../style.css", post_body(p, "../")), encoding="utf-8")
     # 検索エンジン向け
     docs = ROOT / "docs"
-    urls = [BASE, BASE + "arigatou.html", BASE + "blog/index.html"] + [BASE + f'blog/{p["slug"]}.html' for p in posts]
+    urls = [BASE, BASE + "arigatou.html", BASE + "blog/index.html", BASE + "meishi/"] + [BASE + f'blog/{p["slug"]}.html' for p in posts]
     (docs / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"<url><loc>{u}</loc></url>\n" for u in urls) + "</urlset>\n", encoding="utf-8")
     (docs / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n", encoding="utf-8")

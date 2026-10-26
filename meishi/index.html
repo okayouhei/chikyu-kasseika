@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR名刺メーカー｜無料・登録なしでスマホ名刺をつくる</title>
+<meta name="description" content="名前とSNSを入れるだけで、自分だけの名刺ページとQRコードができる無料ツール。アプリも登録もいりません。広島の市民グループ「地球活性化実行委員会」がつくりました。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="meishi.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">無料・登録なし・アプリ不要</div>
+    <h1>QR名刺メーカー</h1>
+    <p>名前やSNSを入れるだけで、自分の名刺ページとQRコードができます。スマホに保存して、会った人に見せるだけ。</p>
+  </header>
+
+  <form class="panel" id="form" novalidate>
+    <h2>1. 名刺に書くこと</h2>
+    <label for="n">名前・ニックネーム（必須）
+      <input id="n" name="n" maxlength="20" autocomplete="nickname" placeholder="例：岡ちゃん" required>
+    </label>
+    <label for="r">肩書き・活動<small>例：地球活性化実行委員会 呼びかけ人</small>
+      <input id="r" name="r" maxlength="40">
+    </label>
+    <label for="m">ひとこと<small>60文字まで</small>
+      <textarea id="m" name="m" maxlength="60" placeholder="例：障がいがあってもなくても、自然につながれる場所を増やしたい。"></textarea>
+    </label>
+
+    <h2>2. つながり方<small style="font-family:var(--body);font-size:13px;color:var(--muted);font-weight:400">（使うものだけでOK）</small></h2>
+    <label for="i">Instagram<small>@のあとの名前</small>
+      <input id="i" name="i" maxlength="40" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="ayu19841002">
+    </label>
+    <label for="x">X（旧Twitter）<small>@のあとの名前</small>
+      <input id="x" name="x" maxlength="40" autocapitalize="off" autocorrect="off" spellcheck="false">
+    </label>
+    <label for="l">LINE<small>友だち追加のURL</small>
+      <input id="l" name="l" type="url" maxlength="200" autocapitalize="off" placeholder="https://line.me/...">
+    </label>
+    <label for="w">ホームページ
+      <input id="w" name="w" type="url" maxlength="200" autocapitalize="off" placeholder="https://...">
+    </label>
+    <label for="e">メール
+      <input id="e" name="e" type="email" maxlength="80" autocapitalize="off">
+    </label>
+    <label for="t">電話番号
+      <input id="t" name="t" type="tel" maxlength="20">
+    </label>
+    <p class="note">電話番号やメールは、名刺を見た人みんなに見えます。知られてもいいものだけ入れてください。</p>
+    <p class="err" id="err" hidden></p>
+    <button class="btn btn-main" type="submit" id="make">名刺をつくる</button>
+  </form>
+
+  <section class="panel result" id="result" hidden>
+    <h2>3. できあがり</h2>
+    <img id="img" alt="QRコードつきの名刺画像">
+    <a class="btn btn-main" id="save" download="qr-meishi.png">画像を保存する</a>
+    <p class="note">iPhoneは画像を長押しして「"写真"に保存」を選んでください。人に会ったら写真を開いて見せるだけです。</p>
+    <a class="btn btn-sub" id="open" target="_blank" rel="noopener">名刺ページを見てみる</a>
+    <div>
+      <p class="note">名刺ページのリンク（SNSのプロフィールにも貼れます）</p>
+      <div class="linkbox" id="link"></div>
+    </div>
+    <button class="btn btn-sub" type="button" id="copy">リンクをコピー</button>
+  </section>
+
+  <section class="panel">
+    <h2>入れた情報はどこに行くの？</h2>
+    <p class="note">どこにも保存しません。名刺の中身はQRコードとリンクの中にだけ入っています。直したいときは、もう一度ここで作り直してください。このスマホには、次に使うときのために入力内容を覚えておきます。</p>
+  </section>
+
+  <footer>つくったのは、広島の市民グループ<br><a href="../index.html">地球活性化実行委員会</a></footer>
+</div>
+
+<script src="qrcode.js"></script>
+<script src="common.js"></script>
+<script>
+(function () {
+  var F = ["n", "r", "m", "i", "x", "l", "w", "e", "t"];
+  var form = document.getElementById("form");
+  var err = document.getElementById("err");
+  try {
+    var saved = JSON.parse(localStorage.getItem("meishi-draft") || "{}");
+    F.forEach(function (k) { if (saved[k]) document.getElementById(k).value = saved[k]; });
+  } catch (e) {}
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var d = {};
+    F.forEach(function (k) { d[k] = document.getElementById(k).value.trim(); });
+    err.hidden = true;
+    if (!d.n) { err.textContent = "名前を入れてください。"; err.hidden = false; document.getElementById("n").focus(); return; }
+    d.i = Meishi.handle(d.i); d.x = Meishi.handle(d.x);
+    d.l = Meishi.safeUrl(d.l); d.w = Meishi.safeUrl(d.w); d.t = Meishi.tel(d.t);
+    try { localStorage.setItem("meishi-draft", JSON.stringify(d)); } catch (e) {}
+
+    var base = location.href.replace(/[?#].*$/, "").replace(/index\.html$/, "");
+    var url = base + "card.html?d=" + Meishi.encode(d);
+    var btn = document.getElementById("make");
+    btn.disabled = true; btn.textContent = "つくっています…";
+    var ready = (document.fonts && document.fonts.load)
+      ? Promise.all([document.fonts.load('900 60px "Zen Maru Gothic"'), document.fonts.load('700 40px "Zen Maru Gothic"')]).catch(function () {})
+      : Promise.resolve();
+    ready.then(function () {
+      var png;
+      try { png = Meishi.makeImage(d, url); }
+      catch (e) { err.textContent = "長すぎて作れませんでした。ひとことやURLを短くしてみてください。"; err.hidden = false; return; }
+      document.getElementById("img").src = png;
+      document.getElementById("save").href = png;
+      document.getElementById("open").href = url;
+      document.getElementById("link").textContent = url;
+      var res = document.getElementById("result");
+      res.hidden = false;
+      res.scrollIntoView({ behavior: "smooth", block: "start" });
+    }).finally(function () { btn.disabled = false; btn.textContent = "名刺をつくる"; });
+  });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    var b = this, t = document.getElementById("link").textContent;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "リンクをコピー"; }, 1600); };
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(ok, function () {});
+  });
+})();
+</script>
+</body>
+</html>
