@@ -46,7 +46,7 @@ def cards(posts, prefix):
 def header(prefix):
     return (f'<header><div class="wrap"><a class="logo" href="{prefix}index.html">{SITE}</a>'
             f'<nav aria-label="メニュー"><a href="{prefix}index.html#about">岡ちゃん</a><a href="{prefix}index.html#event">イベント</a>'
-            f'<a href="{prefix}blog/index.html">ブログ</a><a href="{prefix}index.html#join">仲間募集</a><a href="{prefix}arigatou.html">ありが党</a><a href="{prefix}index.html#contact">連絡先</a></nav></div></header>')
+            f'<a href="{prefix}blog/index.html">ブログ</a><a href="{prefix}index.html#join">仲間募集</a><a href="{prefix}index.html#voices">困りごと</a><a href="{prefix}arigatou.html">ありが党</a><a href="{prefix}index.html#contact">連絡先</a></nav></div></header>')
 
 
 FOOTER = (f'<footer><p>障がいがあってもなくても、自然につながれる場所を広島に。</p>'
