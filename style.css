@@ -117,3 +117,5 @@ footer{padding-block:32px;text-align:center;color:var(--muted);font-size:.85rem;
 .ari-form textarea{font:inherit;width:100%;box-sizing:border-box;border:1px solid #d3dde7;border-radius:12px;padding:12px;background:#fff;color:#14212e}
 .ari-form .btn-ari{margin-top:0;border:0;cursor:pointer;justify-self:start}
 .ari-voice .note{color:#4a5a6a}
+
+.btn-line{background:#06c755;color:#fff;margin-top:14px;margin-left:8px}
