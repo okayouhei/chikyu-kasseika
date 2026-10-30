@@ -52,6 +52,34 @@
     </div>
   </section>
 
+  <section class="ari-voice" id="ari-voice">
+    <div class="wrap stack">
+      <h2>あなたの困りごとを聞かせてください</h2>
+      <p>暮らしの中で「これ、困ってるんだよな」と思うことはありませんか？ 小さなことでも大丈夫です。僕は、みんなの困りごとを聞くところから、政治を考えていきたいと思っています。</p>
+      <ul class="ari-chips" aria-label="たとえば、こんなこと">
+        <li>物の値段・生活費</li><li>住まい</li><li>病院・医療</li><li>福祉・介護</li>
+        <li>仕事</li><li>移動・バリアフリー</li><li>子育て・学校</li><li>ひとりで寂しい</li>
+      </ul>
+      <form class="ari-form" id="ari-voice-form">
+        <label for="ari-voice-text">困っていること</label>
+        <textarea id="ari-voice-text" rows="5" placeholder="例：駅にエレベーターがなくて、遠回りしないといけない" required></textarea>
+        <button type="submit" class="btn btn-ari">メールで送る</button>
+        <p class="note">ボタンを押すと、メールのアプリが開きます。お名前は書かなくても大丈夫です。</p>
+      </form>
+      <div class="links">
+        <div class="link-row"><b>Instagram</b><a href="https://www.instagram.com/ayu19841002/" target="_blank" rel="noopener">@ayu19841002（DMでどうぞ）</a></div>
+      </div>
+    </div>
+    <script>
+      document.getElementById('ari-voice-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var t = document.getElementById('ari-voice-text').value.trim();
+        if (!t) return;
+        location.href = 'mailto:ayu862987@gmail.com?subject=' + encodeURIComponent('ありが党へ：暮らしの困りごと') + '&body=' + encodeURIComponent(t);
+      });
+    </script>
+  </section>
+
   <section class="ari-warm" id="ari-join">
     <div class="wrap">
       <h2>仲間を募集しています</h2>

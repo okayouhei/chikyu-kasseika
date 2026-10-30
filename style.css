@@ -109,3 +109,11 @@ footer{padding-block:32px;text-align:center;color:var(--muted);font-size:.85rem;
 .ari-teaser h3{font-size:1.3rem}
 .ari-teaser p{margin-top:6px}
 .btn-ari{background:#e8506a;color:#fff;margin-top:14px}
+.ari-voice{background:#fffaf2;color:#14212e}
+.ari-chips{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.ari-chips li{background:#fde3ee;border-radius:999px;padding:2px 14px;font-size:.92rem}
+.ari-form{display:grid;gap:10px;background:#fff;border:2px solid #ff8a3d;border-radius:18px;padding:20px}
+.ari-form label{font-weight:700;font-family:var(--display)}
+.ari-form textarea{font:inherit;width:100%;box-sizing:border-box;border:1px solid #d3dde7;border-radius:12px;padding:12px;background:#fff;color:#14212e}
+.ari-form .btn-ari{margin-top:0;border:0;cursor:pointer;justify-self:start}
+.ari-voice .note{color:#4a5a6a}
