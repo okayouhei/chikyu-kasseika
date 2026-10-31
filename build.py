@@ -96,9 +96,18 @@ def build():
                       "founder": {"@type": "Person", "name": "岡ちゃん"}}, ensure_ascii=False)
 
     for out, kind in ((ROOT / "docs", "dist"), (ROOT / "artifact", "artifact")):
+        keep = None
+        if kind == "dist" and (out / "event").exists():  # 手で置いたページ（夢フェスなど）は残す
+            keep = ROOT / ".keep_event"
+            if keep.exists():
+                shutil.rmtree(keep)
+            shutil.copytree(out / "event", keep)
         if out.exists():
             shutil.rmtree(out)
         (out / "blog").mkdir(parents=True)
+        if keep:
+            shutil.copytree(keep, out / "event")
+            shutil.rmtree(keep)
         shutil.copy(ROOT / "style.css", out / "style.css")
         shutil.copytree(ROOT / "img", out / "img")
         if kind == "dist":  # QR名刺メーカー（そのままコピー）
@@ -110,8 +119,8 @@ def build():
         else:  # プレビュー用: doctype なし（公開時に包まれる）
             (out / "page.html").write_text(f"<title>{SITE}</title>\n{FONTS}\n<link rel=\"stylesheet\" href=\"style.css\">\n{home_body}\n", encoding="utf-8")
         ari_body = header("") + "\n" + (ROOT / "arigatou.html").read_text(encoding="utf-8") + "\n" + FOOTER
-        (out / "arigatou.html").write_text(full_doc(f"ありが党｜政治を、もっと身近に（広島・呼びかけ人 岡ちゃん）",
-            "広島から始める政治の仲間づくり「ありが党」。政治団体として動き出すための準備中です。呼びかけ人は電動車椅子で暮らす岡ちゃん。仲間を募集しています。",
+        (out / "arigatou.html").write_text(full_doc(f"政治に疑問を持つあなたへ｜ありが党 – 政治を、もっと身近に（広島）",
+            "政治がよくわからない、声を上げても変わらないのでは――そんな疑問を持つ人へ。広島から始める政治の仲間づくり「ありが党」は、むずかしい言葉を使わず、暮らしの困りごとを聞くところから始めています。",
             "style.css", ari_body), encoding="utf-8")
         (out / "blog" / "index.html").write_text(full_doc(f"活動ブログ｜{SITE}", f"{SITE}（広島）の活動ブログ。", "../style.css", list_body(posts, "../")), encoding="utf-8")
         for p in posts:
