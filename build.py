@@ -50,7 +50,7 @@ def header(prefix):
 
 
 FOOTER = (f'<footer><p>障がいがあってもなくても、自然につながれる場所を広島に。</p>'
-          f'<p><a href="https://www.instagram.com/ayu19841002/" target="_blank" rel="noopener">Instagram @ayu19841002</a></p>'
+          f'<p><a href="https://www.instagram.com/ayu19841002/" target="_blank" rel="noopener">Instagram @ayu19841002</a> ・ <a href="https://line.me/R/ti/p/@265aeget" target="_blank" rel="noopener">公式LINE</a></p>'
           f'<p>© 2026 {SITE} ・ 広島</p></footer>')
 
 
