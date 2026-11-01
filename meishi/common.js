@@ -35,7 +35,7 @@ var Meishi = (function () {
 
   function vcard(d) {
     var esc = function (s) { return String(s).replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n"); };
-    var lines = ["BEGIN:VCARD", "VERSION:3.0", "FN:" + esc(d.n || "")];
+    var lines = ["BEGIN:VCARD", "VERSION:3.0", "N:" + esc(d.n || "") + ";;;;", "FN:" + esc(d.n || "")];
     if (d.r) lines.push("TITLE:" + esc(d.r));
     if (d.t) lines.push("TEL;TYPE=CELL:" + tel(d.t));
     if (d.e) lines.push("EMAIL:" + esc(d.e));
