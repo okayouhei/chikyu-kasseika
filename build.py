@@ -1,5 +1,5 @@
 """地球活性化実行委員会サイトのビルド。
-posts/*.md（先頭に title / date / summary）を読み、docs/（GitHub Pagesで公開）と artifact/（プレビュー用）を作る。
+posts/*.md（先頭に title / date / summary、表紙画像があれば image: img/blog/○○.png）を読み、docs/（GitHub Pagesで公開）と artifact/（プレビュー用）を作る。
 使い方: python3 build.py
 """
 import html, json, pathlib, re, shutil
@@ -54,6 +54,16 @@ FOOTER = (f'<footer><p>障がいがあってもなくても、自然につなが
           f'<p>© 2026 {SITE} ・ 広島</p></footer>')
 
 
+OGP_DEFAULT = "img/ogp.png"  # 共有したときに出る画像（記事に image が無いとき）
+
+
+def share_tags(url, image, kind="website"):
+    img = BASE + (image or OGP_DEFAULT)
+    return (f'<meta property="og:type" content="{kind}">\n'
+            f'<meta property="og:url" content="{url}">\n<meta property="og:image" content="{img}">\n'
+            f'<meta name="twitter:card" content="summary_large_image">\n<link rel="canonical" href="{url}">\n')
+
+
 def full_doc(title, desc, css, body, extra_head=""):
     return f"""<!doctype html>
 <html lang="ja">
@@ -62,10 +72,10 @@ def full_doc(title, desc, css, body, extra_head=""):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(desc)}">
-<meta property="og:type" content="website">
 <meta property="og:title" content="{html.escape(title)}">
 <meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="{SITE}">
 <meta name="google-site-verification" content="hpizfolThPj-HkkcKGadPxsuaJqWVsVbDw-ky93iKaU" />
 {extra_head}{FONTS}
 <link rel="stylesheet" href="{css}">
@@ -79,7 +89,9 @@ def full_doc(title, desc, css, body, extra_head=""):
 
 def post_body(p, prefix):
     return (header(prefix) + f'\n<main class="wrap article"><time datetime="{p["date"]}">{jdate(p["date"])}</time>'
-            f'<h1>{html.escape(p["title"])}</h1><div class="body">{p["html"]}</div>'
+            f'<h1>{html.escape(p["title"])}</h1>'
+            + (f'<img class="cover" src="{prefix}{p["image"]}" alt="{html.escape(p["title"])}" width="1200" height="630">' if p.get("image") else "")
+            + f'<div class="body">{p["html"]}</div>'
             f'<a class="back" href="{prefix}blog/index.html">← 記事一覧へ</a></main>\n' + FOOTER)
 
 
@@ -115,17 +127,18 @@ def build():
         home_body = header("") + "\n" + home + "\n" + FOOTER
         if kind == "dist":
             (out / "index.html").write_text(full_doc(f"{SITE}｜広島から、障がいがあってもなくてもつながれる場所を", DESC, "style.css", home_body,
-                                                     f'<script type="application/ld+json">{org}</script>\n'), encoding="utf-8")
+                                                     share_tags(BASE, None) + f'<script type="application/ld+json">{org}</script>\n'), encoding="utf-8")
         else:  # プレビュー用: doctype なし（公開時に包まれる）
             (out / "page.html").write_text(f"<title>{SITE}</title>\n{FONTS}\n<link rel=\"stylesheet\" href=\"style.css\">\n{home_body}\n", encoding="utf-8")
         ari_body = header("") + "\n" + (ROOT / "arigatou.html").read_text(encoding="utf-8") + "\n" + FOOTER
         (out / "arigatou.html").write_text(full_doc(f"政治に疑問を持つあなたへ｜ありが党 – 政治を、もっと身近に（広島）",
             "政治がよくわからない、声を上げても変わらないのでは――そんな疑問を持つ人へ。広島から始める政治の仲間づくり「ありが党」は、むずかしい言葉を使わず、暮らしの困りごとを聞くところから始めています。",
-            "style.css", ari_body), encoding="utf-8")
-        (out / "blog" / "index.html").write_text(full_doc(f"活動ブログ｜{SITE}", f"{SITE}（広島）の活動ブログ。", "../style.css", list_body(posts, "../")), encoding="utf-8")
+            "style.css", ari_body, share_tags(BASE + "arigatou.html", None)), encoding="utf-8")
+        (out / "blog" / "index.html").write_text(full_doc(f"活動ブログ｜{SITE}", f"{SITE}（広島）の活動ブログ。", "../style.css", list_body(posts, "../"), share_tags(BASE + "blog/index.html", None)), encoding="utf-8")
         for p in posts:
             (out / "blog" / f'{p["slug"]}.html').write_text(
-                full_doc(f'{p["title"]}｜{SITE}', p.get("summary", DESC), "../style.css", post_body(p, "../")), encoding="utf-8")
+                full_doc(f'{p["title"]}｜{SITE}', p.get("summary", DESC), "../style.css", post_body(p, "../"),
+                         share_tags(BASE + f'blog/{p["slug"]}.html', p.get("image"), "article")), encoding="utf-8")
     # 検索エンジン向け
     docs = ROOT / "docs"
     urls = [BASE, BASE + "arigatou.html", BASE + "blog/index.html", BASE + "meishi/"] + [BASE + f'blog/{p["slug"]}.html' for p in posts]
