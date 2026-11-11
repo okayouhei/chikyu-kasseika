@@ -27,6 +27,16 @@ def load_posts():
     return posts
 
 
+def blog_ld(p):
+    d = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"],
+         "datePublished": p["date"], "description": p.get("summary", ""), "inLanguage": "ja",
+         "author": {"@type": "Person", "name": "岡ちゃん（岡洋平）"},
+         "mainEntityOfPage": BASE + f'blog/{p["slug"]}.html'}
+    if p.get("image"):
+        d["image"] = BASE + p["image"]
+    return f'<script type="application/ld+json">{json.dumps(d, ensure_ascii=False)}</script>\n'
+
+
 def jdate(d):
     y, mo, da = d.split("-")
     return f"{int(y)}年{int(mo)}月{int(da)}日"
@@ -130,7 +140,15 @@ def build():
                                                      share_tags(BASE, None) + f'<script type="application/ld+json">{org}</script>\n'), encoding="utf-8")
         else:  # プレビュー用: doctype なし（公開時に包まれる）
             (out / "page.html").write_text(f"<title>{SITE}</title>\n{FONTS}\n<link rel=\"stylesheet\" href=\"style.css\">\n{home_body}\n", encoding="utf-8")
-        ari_body = header("") + "\n" + (ROOT / "arigatou.html").read_text(encoding="utf-8") + "\n" + FOOTER
+        ari_src = (ROOT / "arigatou.html").read_text(encoding="utf-8")
+        enz = [p for p in posts if "ネット街頭演説" in p.get("title", "")]
+        if enz:
+            enz_html = ('  <section id="ari-enzetsu">\n    <div class="wrap">\n      <h2>ネット街頭演説</h2>\n'
+                        '      <p>街に立つかわりに、ネットで毎日、暮らしの困りごとと政治について話しています。</p>\n'
+                        + cards(enz[:6], "blog/") + '\n      <p><a href="blog/index.html">ブログの記事をすべて見る →</a></p>\n    </div>\n  </section>\n\n')
+            mark = '  <section class="ari-warm" id="ari-join">'
+            ari_src = ari_src.replace(mark, enz_html + mark, 1) if mark in ari_src else ari_src
+        ari_body = header("") + "\n" + ari_src + "\n" + FOOTER
         (out / "arigatou.html").write_text(full_doc(f"政治に疑問を持つあなたへ｜ありが党 – 政治を、もっと身近に（広島）",
             "政治がよくわからない、声を上げても変わらないのでは――そんな疑問を持つ人へ。広島から始める政治の仲間づくり「ありが党」は、むずかしい言葉を使わず、暮らしの困りごとを聞くところから始めています。",
             "style.css", ari_body, share_tags(BASE + "arigatou.html", None)), encoding="utf-8")
@@ -138,12 +156,13 @@ def build():
         for p in posts:
             (out / "blog" / f'{p["slug"]}.html').write_text(
                 full_doc(f'{p["title"]}｜{SITE}', p.get("summary", DESC), "../style.css", post_body(p, "../"),
-                         share_tags(BASE + f'blog/{p["slug"]}.html', p.get("image"), "article")), encoding="utf-8")
+                         share_tags(BASE + f'blog/{p["slug"]}.html', p.get("image"), "article") + blog_ld(p)), encoding="utf-8")
     # 検索エンジン向け
     docs = ROOT / "docs"
-    urls = [BASE, BASE + "arigatou.html", BASE + "blog/index.html", BASE + "meishi/"] + [BASE + f'blog/{p["slug"]}.html' for p in posts]
+    newest = posts[0]["date"] if posts else None
+    urls = [(BASE, newest), (BASE + "arigatou.html", newest), (BASE + "blog/index.html", newest), (BASE + "meishi/", None)] + [(BASE + f'blog/{p["slug"]}.html', p["date"]) for p in posts]
     (docs / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        + "".join(f"<url><loc>{u}</loc></url>\n" for u in urls) + "</urlset>\n", encoding="utf-8")
+        + "".join(f"<url><loc>{u}</loc>" + (f"<lastmod>{d}</lastmod>" if d else "") + "</url>\n" for u, d in urls) + "</urlset>\n", encoding="utf-8")
     (docs / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {BASE}sitemap.xml\n", encoding="utf-8")
     (docs / ".nojekyll").write_text("")
     print(f"built {len(posts)} posts")
