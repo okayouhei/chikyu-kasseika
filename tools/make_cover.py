@@ -34,7 +34,7 @@ def page(no, theme, w, h, big, q=""):
              q=44 if big else 32, qgap=56 if big else 22)
     return f"""<html><head><meta charset="utf-8"><style>{CSS % s}</style></head><body><div class="card">
 <div><span class="kicker">ありが党 ネット街頭演説</span>
-<p class="no">第{no}回</p><p class="theme"><span>{theme}</span></p>{f'<p class="q">{q}</p>' if q else ""}</div>
+<p class="no">{('第'+str(no)+'回') if str(no).isdigit() else no}</p><p class="theme"><span>{theme}</span></p>{f'<p class="q">{q}</p>' if q else ""}</div>
 <div class="foot"><img src="{PHOTO}" alt=""><p class="who">呼びかけ人 岡ちゃん<small>広島から、政治をもっと身近に</small></p></div>
 </div></body></html>"""
 
