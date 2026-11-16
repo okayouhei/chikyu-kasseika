@@ -1,0 +1,12 @@
+{
+  "name": "chikyu-kasseika-line-bot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "地球活性化実行委員会 LINEグループ連携Bot（告知・日程調整・リマインド・要約/議事録・Q&A）",
+  "type": "module",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  }
+}
