@@ -66,6 +66,14 @@ FOOTER = (f'<footer><p>障がいがあってもなくても、自然につなが
 
 OGP_DEFAULT = "img/ogp.png"  # 共有したときに出る画像（記事に image が無いとき）
 
+GA_TAG = ('<script async src="https://www.googletagmanager.com/gtag/js?id=G-NY83EEJ8YC"></script>\n'
+          '<script>\n'
+          '  window.dataLayer = window.dataLayer || [];\n'
+          '  function gtag(){dataLayer.push(arguments);}\n'
+          "  gtag('js', new Date());\n"
+          "  gtag('config', 'G-NY83EEJ8YC');\n"
+          '</script>\n')
+
 
 def share_tags(url, image, kind="website"):
     img = BASE + (image or OGP_DEFAULT)
@@ -87,7 +95,7 @@ def full_doc(title, desc, css, body, extra_head=""):
 <meta property="og:locale" content="ja_JP">
 <meta property="og:site_name" content="{SITE}">
 <meta name="google-site-verification" content="hpizfolThPj-HkkcKGadPxsuaJqWVsVbDw-ky93iKaU" />
-{extra_head}{FONTS}
+{GA_TAG}{extra_head}{FONTS}
 <link rel="stylesheet" href="{css}">
 </head>
 <body>
