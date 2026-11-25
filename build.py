@@ -83,6 +83,9 @@ def share_tags(url, image, kind="website"):
 
 
 def full_doc(title, desc, css, body, extra_head=""):
+    # 見た目を変えたとき、ブラウザが古い style.css を使い続けないように番号を付ける
+    import hashlib
+    css = css + "?v=" + hashlib.md5((ROOT / "style.css").read_bytes()).hexdigest()[:8]
     return f"""<!doctype html>
 <html lang="ja">
 <head>
