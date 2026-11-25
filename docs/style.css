@@ -1,13 +1,11 @@
 /* Layout: 一列の読みやすい縦長ページ。大きめの文字・高コントラスト・押しやすいボタン（アクセシビリティ重視） */
 :root{
+  color-scheme:light;
   --bg:#fcfaf2; --surface:#ffffff; --ink:#1d3b37; --muted:#4d6460;
   --sky:#2f7a5c; --sky-soft:#e2f1e7; --sun:#f6c94c; --sun-soft:#fff5d6; --line:#e6e7dc;
   --display:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Noto Sans JP",sans-serif;
   --body:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f1720; --surface:#17222e; --ink:#eef3f8; --muted:#a9b7c5;
-  --sky:#6fb3ea; --sky-soft:#1b3348; --sun:#f5c842; --sun-soft:#3a3214; --line:#2a3a4b; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0f1720; --surface:#17222e; --ink:#eef3f8; --muted:#a9b7c5;
   --sky:#6fb3ea; --sky-soft:#1b3348; --sun:#f5c842; --sun-soft:#3a3214; --line:#2a3a4b; color-scheme:dark}
