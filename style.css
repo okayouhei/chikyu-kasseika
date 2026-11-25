@@ -1,7 +1,7 @@
 /* Layout: 一列の読みやすい縦長ページ。大きめの文字・高コントラスト・押しやすいボタン（アクセシビリティ重視） */
 :root{
-  --bg:#f5f8fb; --surface:#ffffff; --ink:#14212e; --muted:#4a5a6a;
-  --sky:#1f6fb2; --sky-soft:#dcebf7; --sun:#f2b705; --sun-soft:#fff3c4; --line:#d3dde7;
+  --bg:#fcfaf2; --surface:#ffffff; --ink:#1d3b37; --muted:#4d6460;
+  --sky:#2f7a5c; --sky-soft:#e2f1e7; --sun:#f6c94c; --sun-soft:#fff5d6; --line:#e6e7dc;
   --display:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Noto Sans JP",sans-serif;
   --body:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
 }
@@ -24,20 +24,26 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--sun);outline-offset
 /* ヘッダー */
 header{border-bottom:1px solid var(--line);background:var(--surface)}
 header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;flex-wrap:wrap}
-.logo{font-family:var(--display);font-weight:900;font-size:1.15rem;text-decoration:none;color:var(--ink)}
+.logo{font-family:var(--display);font-weight:900;font-size:1.15rem;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
+.logo::before{content:"";width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8fd0e3,#3f9ab8 60%);box-shadow:inset -5px -3px 0 #5fae74}
 nav{display:flex;gap:16px;flex-wrap:wrap;font-size:.95rem}
 nav a{text-decoration:none;color:var(--muted);font-weight:500}
 nav a:hover{color:var(--sky)}
 
 /* ヒーロー */
-.hero{padding-block:56px 48px}
+.hero-bg{background:linear-gradient(120deg,#e6f3f8 0%,#f3f8ec 55%,#fff8e3 100%)}
+.hero{padding-block:64px 56px;max-width:1040px;display:grid;grid-template-columns:1.25fr .9fr;gap:32px;align-items:center}
+.hero h1 .nw{display:inline-block}
+.hero-globe{width:100%;max-width:340px;justify-self:center}
+@media (max-width:760px){.hero{grid-template-columns:1fr}.hero-globe{max-width:220px;grid-row:1}}
 .hero .place{font-size:.9rem;letter-spacing:.12em;color:var(--sky);font-weight:700}
 .hero h1{font-size:clamp(1.9rem,6vw,2.9rem);font-weight:900;margin-top:14px}
 .hero h1 mark{background:linear-gradient(transparent 62%,var(--sun) 62%);color:inherit;padding:0 .05em}
 .hero .lead{margin-top:20px;font-size:1.08rem;color:var(--muted);max-width:36em}
 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:999px;font-weight:700;text-decoration:none;font-size:1rem}
-.btn-main{background:var(--sky);color:var(--surface)}
+.btn-main{background:var(--sun);color:#1d3b37;box-shadow:0 5px 0 #d9a92a}
+.btn-main:hover{transform:translateY(2px);box-shadow:0 3px 0 #d9a92a}
 .btn-ig{background:linear-gradient(45deg,#f58529,#dd2a7b 55%,#8134af);color:#fff}
 .btn-sub{border:2px solid var(--sky);color:var(--sky);background:transparent}
 
